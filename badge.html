@@ -54,13 +54,17 @@
     </div>
 
     <div class="product-card">
-  <img class="switch-img"
-       src="GMA1.jpg"
-       data-images="GMA2.jpg,GMA3.jpg,GMA4.jpg"
-       onclick="switchImage(this)" />
+  <div class="image-wrapper">
+    <img class="prod-img" src="GMA1.jpg" data-images="GMA2.jpg,GMA3.jpg,GMA4.jpg" onclick="openPreview(this)">
+    
+    <!-- 左右切换箭头 -->
+    <span class="arrow left" onclick="prevImage(this)">←</span>
+    <span class="arrow right" onclick="nextImage(this)">→</span>
+  </div>
 
-  <h3>贴纸</h3>
+  <h3>钥匙扣 / 吊饰</h3>
   <p>热门二次元角色，高需求产品。</p>
+
 </div>
 
 
@@ -73,13 +77,101 @@
 </div>
 
 <script>
-function switchImage(img) {
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.prod-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: zoom-in;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: white;
+  padding: 8px 12px;
+  font-size: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: none; /* 默认隐藏 */
+  user-select: none;
+}
+
+.image-wrapper:hover .arrow {
+  display: block; /* 鼠标移上来才显示箭头 */
+}
+
+.arrow.left { left: 10px; }
+.arrow.right { right: 10px; }
+
+/* 大图预览背景 */
+#preview-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* 大图 */
+#preview-img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 20px black;
+  cursor: pointer;
+}
+
+</script>  
+
+<script>
+function nextImage(btn) {
+  let wrapper = btn.parentElement;
+  let img = wrapper.querySelector(".prod-img");
   let list = img.dataset.images.split(",");
   let current = list.indexOf(img.src.split("/").pop());
   let next = (current + 1) % list.length;
   img.src = list[next];
 }
-</script>  
+
+function prevImage(btn) {
+  let wrapper = btn.parentElement;
+  let img = wrapper.querySelector(".prod-img");
+  let list = img.dataset.images.split(",");
+  let current = list.indexOf(img.src.split("/").pop());
+  let prev = (current - 1 + list.length) % list.length;
+  img.src = list[prev];
+}
+
+/* 打开大图预览 */
+function openPreview(img) {
+  document.getElementById("preview-img").src = img.src;
+  document.getElementById("preview-bg").style.display = "flex";
+}
+
+/* 点击关闭预览 */
+function closePreview() {
+  document.getElementById("preview-bg").style.display = "none";
+}
+</script>
+
+<!-- 大图预览层 -->
+<div id="preview-bg" onclick="closePreview()">
+  <img id="preview-img" />
+</div>
+
+
   
 </body>
 </html>
