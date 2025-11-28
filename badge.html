@@ -72,5 +72,14 @@
   <a class="back-btn" href="/">返回首页</a>
 </div>
 
+<script>
+function switchImage(img) {
+  let list = img.dataset.images.split(",");
+  let current = list.indexOf(img.src.split("/").pop());
+  let next = (current + 1) % list.length;
+  img.src = list[next];
+}
+</script>  
+  
 </body>
 </html>
