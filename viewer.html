@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>查看图片</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    img {
+      max-width: 90%;
+      max-height: 90%;
+    }
+
+    .arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 50px;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      padding: 20px;
+    }
+
+    .left { left: 30px; }
+    .right { right: 30px; }
+
+    .close-btn {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<span class="close-btn" onclick="window.history.back()">✕</span>
+<span class="arrow left" onclick="prev()">❮</span>
+<img id="viewer-img" src="">
+<span class="arrow right" onclick="next()">❯</span>
+
+<script>
+let params = new URLSearchParams(location.search);
+let imgs = params.get("imgs").split(",");
+let index = parseInt(params.get("index")) || 0;
+
+function show() {
+  document.getElementById("viewer-img").src = imgs[index];
+}
+
+function next() {
+  index = (index + 1) % imgs.length;
+  show();
+}
+
+function prev() {
+  index = (index - 1 + imgs.length) % imgs.length;
+  show();
+}
+
+show();
+</script>
+
+</body>
+</html>
