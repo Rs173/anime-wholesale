@@ -83,8 +83,78 @@
       font-size: 14px;
       margin: 4px 0;
     }
+
+    /* 分页条样式 */
+#pagination {
+  margin: 30px 0 10px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+#pagination button {
+  min-width: 32px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#pagination button.active {
+  background: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+ document.addEventListener('DOMContentLoaded', function () {
+    const itemsPerPage = 8; // 每页显示多少个商品，自己改
+    const cards = Array.from(document.querySelectorAll('.product-card'));
+    const totalPages = Math.ceil(cards.length / itemsPerPage);
+    const pagination = document.getElementById('pagination');
+
+    function showPage(page) {
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      cards.forEach((card, index) => {
+        card.style.display = (index >= start && index < end) ? '' : 'none';
+      });
+
+      // 高亮当前页
+      Array.from(pagination.children).forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.page) === page);
+      });
+    }
+
+    function createPagination() {
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.dataset.page = i;
+        btn.addEventListener('click', () => showPage(i));
+        pagination.appendChild(btn);
+      }
+    }
+
+    if (totalPages > 1) {
+      createPagination();
+      showPage(1);  // 默认显示第 1 页
+    }
+  });    
+
+
+
+
+
+
+
+
+    
   </style>
 </head>
+
+
 <body>
 
 <header>
@@ -468,6 +538,8 @@
 
 
   </div>
+  <!-- 分页条 -->
+  <div id="pagination"></div>
 </div>
 
 </body>
